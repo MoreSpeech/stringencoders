@@ -1,6 +1,3 @@
-/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4 -*- */
-/* vi: set expandtab shiftwidth=4 tabstop=4: */
-
 /**
  * \file modp_xml.h
  * \brief Experimental XML/HTML decoder
@@ -12,12 +9,13 @@
  * <PRE>
  * High Performance XML Decoder (for now)
  *
- * Copyright &copy; 2012  Nick Galbreath
+ * Copyright &copy; 2012-2016  Nick Galbreath
  * All rights reserved.
+ *
+ * Released under MIT license. See LICENSE fro details.
  *
  * https://github.com/client9/stringencoders
  *
- * Released under bsd license.  See modp_xml.c for details.
  * </PRE>
  */
 
@@ -127,7 +125,7 @@ END_C
 
 namespace modp {
 
-    /**
+/**
      * Url decode a string.
      * This function does not allocate memory.
      *
@@ -135,33 +133,33 @@ namespace modp {
      * \return a reference to the input string.
      *      There is no error case, bad characters are passed through
      */
-    inline std::string& xml_decode(std::string& s)
-    {
-        size_t d = modp_xml_decode(const_cast<char*>(s.data()), s.data(), s.size());
-        s.erase(d, std::string::npos);
-        return s;
-    }
+inline std::string& xml_decode(std::string& s)
+{
+    size_t d = modp_xml_decode(const_cast<char*>(s.data()), s.data(), s.size());
+    s.erase(d, std::string::npos);
+    return s;
+}
 
-    inline std::string xml_decode(const char* str)
-    {
-        std::string s(str);
-        xml_decode(s);
-        return s;
-    }
+inline std::string xml_decode(const char* str)
+{
+    std::string s(str);
+    xml_decode(s);
+    return s;
+}
 
-    inline std::string xml_decode(const char* str, size_t len)
-    {
-        std::string s(str, len);
-        xml_decode(s);
-        return s;
-    }
+inline std::string xml_decode(const char* str, size_t len)
+{
+    std::string s(str, len);
+    xml_decode(s);
+    return s;
+}
 
-    inline std::string xml_decode(const std::string& s)
-    {
-        std::string x(s);
-        xml_decode(x);
-        return x;
-    }
+inline std::string xml_decode(const std::string& s)
+{
+    std::string x(s);
+    xml_decode(x);
+    return x;
+}
 }
 #endif
 

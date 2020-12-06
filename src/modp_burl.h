@@ -1,6 +1,3 @@
-/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4 -*- */
-/* vi: set expandtab shiftwidth=4 tabstop=4: */
-
 /**
  * \file modp_burl.h
  * \brief high performance URL encoding and decoding
@@ -11,12 +8,12 @@
  * <PRE>
  * High Performance URL Encoder/Decoder
  *
- * Copyright &copy; 2006, 2007  Nick Galbreath
+ * Copyright &copy; 2006-2016  Nick Galbreath
  * All rights reserved.
  *
  * https://github.com/client9/stringencoders
  *
- * Released under bsd license.
+ * Released under MIT license. See LICENSE for details.
  * </PRE>
  */
 
@@ -29,12 +26,12 @@
 
 #ifdef __cplusplus
 #ifndef MODP_C_BEGIN_DECLS
-# define MODP_C_BEGIN_DECLS extern "C" {
-# define MODP_C_END_DECLS   }
+#define MODP_C_BEGIN_DECLS extern "C" {
+#define MODP_C_END_DECLS }
 #endif
 #else
-# define MODP_C_BEGIN_DECLS
-# define MODP_C_END_DECLS
+#define MODP_C_BEGIN_DECLS
+#define MODP_C_END_DECLS
 #endif
 
 MODP_C_BEGIN_DECLS
@@ -81,7 +78,7 @@ size_t modp_burl_min_encode_strlen(const char* src, const size_t len);
  * Provides the maximum size for output string given
  * and input size of A bytes.
  */
-#define modp_burl_encode_len(A) (3*A + 1)
+#define modp_burl_encode_len(A) (3 * A + 1)
 
 /**
  * Given the exact size of output string.
@@ -139,61 +136,61 @@ MODP_C_END_DECLS
 
 namespace modp {
 
-    inline std::string url_encode(const char* s, size_t len)
-    {
-        std::string x(modp_burl_encode_len(len), '\0');
-        size_t d = modp_burl_encode(const_cast<char*>(x.data()), s, len);
-        x.erase(d, std::string::npos);
-        return x;
-    }
+inline std::string url_encode(const char* s, size_t len)
+{
+    std::string x(modp_burl_encode_len(len), '\0');
+    size_t d = modp_burl_encode(const_cast<char*>(x.data()), s, len);
+    x.erase(d, std::string::npos);
+    return x;
+}
 
-    inline std::string url_encode(const char* s)
-    {
-        return url_encode(s, strlen(s));
-    }
+inline std::string url_encode(const char* s)
+{
+    return url_encode(s, strlen(s));
+}
 
-    inline std::string url_encode(const std::string& s)
-    {
-        return url_encode(s.data(), s.size());
-    }
+inline std::string url_encode(const std::string& s)
+{
+    return url_encode(s.data(), s.size());
+}
 
-    /**
+/**
      * Standard (maximal) url encoding.
      *
      * \param[in,out] s the string to be encoded
      * \return a reference to the input string
      */
-    inline std::string& url_encode(std::string& s)
-    {
-        std::string x(url_encode(s.data(), s.size()));
-        s.swap(x);
-        return s;
-    }
+inline std::string& url_encode(std::string& s)
+{
+    std::string x(url_encode(s.data(), s.size()));
+    s.swap(x);
+    return s;
+}
 
-    /**
+/**
      * Minimal Url Encoding
      *
      * \param[in,out] s the string to be encoded
      * \return a reference to the input string
      */
-    inline std::string& url_min_encode(std::string& s)
-    {
-        std::string x(modp_burl_encode_len(s.size()), '\0');
-        size_t d = modp_burl_min_encode(const_cast<char*>(x.data()), s.data(), s.size());
-        x.erase(d, std::string::npos);
-        s.swap(x);
-        return s;
-    }
+inline std::string& url_min_encode(std::string& s)
+{
+    std::string x(modp_burl_encode_len(s.size()), '\0');
+    size_t d = modp_burl_min_encode(const_cast<char*>(x.data()), s.data(), s.size());
+    x.erase(d, std::string::npos);
+    s.swap(x);
+    return s;
+}
 
-    inline std::string url_min_encode(const std::string& s)
-    {
-        std::string x(modp_burl_encode_len(s.size()), '\0');
-        size_t d = modp_burl_min_encode(const_cast<char*>(x.data()), s.data(), s.size());
-        x.erase(d, std::string::npos);
-        return x;
-    }
+inline std::string url_min_encode(const std::string& s)
+{
+    std::string x(modp_burl_encode_len(s.size()), '\0');
+    size_t d = modp_burl_min_encode(const_cast<char*>(x.data()), s.data(), s.size());
+    x.erase(d, std::string::npos);
+    return x;
+}
 
-    /**
+/**
      * Url decode a string.
      * This function does not allocate memory.
      *
@@ -201,61 +198,61 @@ namespace modp {
      * \return a reference to the input string.
      *      There is no error case, bad characters are passed through
      */
-    inline std::string& url_decode(std::string& s)
-    {
-        size_t d = modp_burl_decode(const_cast<char*>(s.data()), s.data(), s.size());
-        s.erase(d, std::string::npos);
-        return s;
-    }
+inline std::string& url_decode(std::string& s)
+{
+    size_t d = modp_burl_decode(const_cast<char*>(s.data()), s.data(), s.size());
+    s.erase(d, std::string::npos);
+    return s;
+}
 
-    inline std::string& url_decode_raw(std::string& s)
-    {
-        size_t d = modp_burl_decode_raw(const_cast<char*>(s.data()), s.data(), s.size());
-        s.erase(d, std::string::npos);
-        return s;
-    }
+inline std::string& url_decode_raw(std::string& s)
+{
+    size_t d = modp_burl_decode_raw(const_cast<char*>(s.data()), s.data(), s.size());
+    s.erase(d, std::string::npos);
+    return s;
+}
 
-    inline std::string url_decode(const char* str)
-    {
-        std::string s(str);
-        url_decode(s);
-        return s;
-    }
+inline std::string url_decode(const char* str)
+{
+    std::string s(str);
+    url_decode(s);
+    return s;
+}
 
-    inline std::string url_decode_raw(const char* str)
-    {
-        std::string s(str);
-        url_decode_raw(s);
-        return s;
-    }
+inline std::string url_decode_raw(const char* str)
+{
+    std::string s(str);
+    url_decode_raw(s);
+    return s;
+}
 
-    inline std::string url_decode(const char* str, size_t len)
-    {
-        std::string s(str, len);
-        url_decode(s);
-        return s;
-    }
+inline std::string url_decode(const char* str, size_t len)
+{
+    std::string s(str, len);
+    url_decode(s);
+    return s;
+}
 
-    inline std::string url_decode_raw(const char* str, size_t len)
-    {
-        std::string s(str, len);
-        url_decode_raw(s);
-        return s;
-    }
+inline std::string url_decode_raw(const char* str, size_t len)
+{
+    std::string s(str, len);
+    url_decode_raw(s);
+    return s;
+}
 
-    inline std::string url_decode(const std::string& s)
-    {
-        std::string x(s);
-        url_decode(x);
-        return x;
-    }
+inline std::string url_decode(const std::string& s)
+{
+    std::string x(s);
+    url_decode(x);
+    return x;
+}
 
-    inline std::string url_decode_raw(const std::string& s)
-    {
-        std::string x(s);
-        url_decode_raw(x);
-        return x;
-    }
+inline std::string url_decode_raw(const std::string& s)
+{
+    std::string x(s);
+    url_decode_raw(x);
+    return x;
+}
 }
 #endif
 

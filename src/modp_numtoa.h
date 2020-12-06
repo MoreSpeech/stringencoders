@@ -1,6 +1,3 @@
-/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4 -*- */
-/* vi: set expandtab shiftwidth=4 tabstop=4: */
-
 /**
  * \file modp_numtoa.h
  * \brief Fast integer and floating-point numbers to string conversion
@@ -8,20 +5,18 @@
  * This defines signed/unsigned integer, and 'double' to char buffer
  * converters.  The standard way of doing this is with "sprintf", however
  * these functions are
- *   * guarenteed maximum size output
+ *   * guaranteed maximum size output
  *   * 5-20x faster!
  *   * Won't core-dump
  *
- * Note: this file is under and MIT license
  */
-
 
 /**
  * <pre>
  * Copyright &copy; 2007, Nick Galbreath -- nickg [at] client9 [dot] com
  * All rights reserved.
- * http://code.google.com/p/stringencoders/
- * Released under the MIT license.
+ * https://github.com/client9/stringencoders/
+ * Released under the MIT license.  See LICENSE for details.
  * </pre>
  *
  */

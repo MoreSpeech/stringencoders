@@ -1,6 +1,3 @@
-/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4 -*- */
-/* vi: set expandtab shiftwidth=4 tabstop=4: */
-
 /**
  * \file modp_json.h
  * \brief ad-hoc json generator
@@ -14,12 +11,12 @@
  * <PRE>
  * High Performance c-string to javascript-string encoder
  *
- * Copyright &copy; 2014 Nick Galbreath
+ * Copyright &copy; 2014-2016 Nick Galbreath
  * All rights reserved.
  *
  * https://github.com/client9/stringencoders
  *
- * Released under bsd license.  See modp_json.c for details.
+ * Released under MIT license.  See LICENSE for details.
  * </PRE>
  */
 
@@ -28,12 +25,12 @@
 
 #ifdef __cplusplus
 #ifndef MODP_C_BEGIN_DECLS
-# define MODP_C_BEGIN_DECLS extern "C" {
-# define MODP_C_END_DECLS   }
+#define MODP_C_BEGIN_DECLS extern "C" {
+#define MODP_C_END_DECLS }
 #endif
 #else
-# define MODP_C_BEGIN_DECLS
-# define MODP_C_END_DECLS
+#define MODP_C_BEGIN_DECLS
+#define MODP_C_END_DECLS
 #endif
 
 MODP_C_BEGIN_DECLS
@@ -43,8 +40,8 @@ MODP_C_BEGIN_DECLS
 #endif
 
 /* pull in size_t */
-#include <string.h>
 #include <stdint.h>
+#include <string.h>
 
 typedef struct {
     int depth;
@@ -62,7 +59,7 @@ void modp_json_ary_close(modp_json_ctx* ctx);
 
 /*
  *
- * Note: to add a 'null string' explicity use 'add_null' and do NOT
+ * Note: to add a 'null string' explicitly use 'add_null' and do NOT
  * pass in a null pointer here.
  */
 void modp_json_add_string(modp_json_ctx* ctx, const char*, size_t);
@@ -94,10 +91,10 @@ void modp_json_add_uint32(modp_json_ctx* ctx, uint32_t val);
  *
  */
 void modp_json_add_uint64(modp_json_ctx* ctx, uint64_t val,
-                          int stringonly);
+    int stringonly);
 
 /*
- * explicity add a null type
+ * explicitly add a null type
  */
 void modp_json_add_null(modp_json_ctx* ctx);
 

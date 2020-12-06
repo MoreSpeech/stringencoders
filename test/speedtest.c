@@ -1,38 +1,36 @@
-/* -*- mode: c; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4 -*- */
-/* vi: set expandtab shiftwidth=4 tabstop=4: */
-
 /** \file speedtest.c
  *
- * Copyright 2005,2006,2007, Nick Galbreath -- nickg [at] modp [dot] com
+ * Copyright 2005-2016 Nick Galbreath -- nickg [at] client9 [dot] com
  * All rights reserved.
  *
- * http://code.google.com/p/stringencoders/
+ * https://github.com/client9/stringencoders/
  *
- * Released under bsd license.  See modp_b64.c for details.
+ * Released under MIT license.  See LICENSE for details.
  *
  * Quickie performance tester.  This does NOT test correctness.
  *
  */
 
-#include "modp_b2.h"
-#include "modp_b16.h"
-#include "modp_b64.h"
 #include "apr_base64.h"
+#include "modp_b16.h"
+#include "modp_b2.h"
+#include "modp_b64.h"
 #include "modp_b85.h"
-#include "modp_burl.h"
 #include "modp_bjavascript.h"
+#include "modp_burl.h"
 
 #include <time.h>
 #ifndef CLOCKS_PER_SEC
-# ifdef CLK_TCK
-#  define CLOCKS_PER_SEC (CLK_TCK)
-# endif
+#ifdef CLK_TCK
+#define CLOCKS_PER_SEC (CLK_TCK)
+#endif
 #endif
 #include <stdio.h>
 #include <string.h>
 
 #define SZ 4096
-int main(void) {
+int main(void)
+{
     double s1, s2;
     int i, j;
     clock_t c0, c1;
@@ -42,19 +40,19 @@ int main(void) {
       this contains the message sizes we'll test on
       add, subtract, change as desired.
     */
-    size_t sizes[] = {20, 200, 2000};
+    size_t sizes[] = { 20, 200, 2000 };
 
     for (i = 0; i < (int)sizeof(teststr1); ++i) {
         teststr1[i] = (char)('A' + i % 26);
     }
 
     /* over allocate result buffers */
-    char result[SZ*8];
-    char result2[SZ*8];
+    char result[SZ * 8];
+    char result2[SZ * 8];
 
     const int MAX = 1000000;
 
-    for (j = 0; j < (int)(sizeof(sizes)/sizeof(size_t)); ++j) {
+    for (j = 0; j < (int)(sizeof(sizes) / sizeof(size_t)); ++j) {
         printf("\nMessage size = %d\n", (int)sizes[j]);
 
         printf("\tmodpb64\tapache\timprovement\tmodpb85\tmodpurl\tmodpb16\tmodpb2\tmodpjs\n");
@@ -67,7 +65,7 @@ int main(void) {
             modp_b64_encode(result, teststr1, sizes[j]);
         }
         c1 = clock();
-        s1 = (double)(c1 - c0)*(1.0 / (double)CLOCKS_PER_SEC);
+        s1 = (double)(c1 - c0) * (1.0 / (double)CLOCKS_PER_SEC);
         printf("%6.2f\t", s1);
         fflush(stdout);
 
@@ -75,15 +73,14 @@ int main(void) {
         c0 = clock();
         for (i = 0; i < MAX; ++i) {
             apr_base64_encode_binary(result,
-                                     (const unsigned char*) teststr1,
-                                     (int)sizes[j]);
+                (const unsigned char*)teststr1,
+                (int)sizes[j]);
         }
         c1 = clock();
-        s2 = (double)(c1 - c0)*(1.0 / (double)CLOCKS_PER_SEC);
-        printf("%6.2f\t",  s2);
-        printf("%6.2fx\t\t", s2/s1);
+        s2 = (double)(c1 - c0) * (1.0 / (double)CLOCKS_PER_SEC);
+        printf("%6.2f\t", s2);
+        printf("%6.2fx\t\t", s2 / s1);
         fflush(stdout);
-
 
         /*
          * base85 encode, let's see what is faster
@@ -93,7 +90,7 @@ int main(void) {
             modp_b85_encode(result, teststr1, sizes[j]);
         }
         c1 = clock();
-        s1 = (double)(c1 - c0)*(1.0 / (double)CLOCKS_PER_SEC);
+        s1 = (double)(c1 - c0) * (1.0 / (double)CLOCKS_PER_SEC);
         printf("%6.2f\t", s1);
         fflush(stdout);
 
@@ -105,7 +102,7 @@ int main(void) {
             modp_burl_encode(result, teststr1, sizes[j]);
         }
         c1 = clock();
-        s1 = (double)(c1 - c0)*(1.0 / (double)CLOCKS_PER_SEC);
+        s1 = (double)(c1 - c0) * (1.0 / (double)CLOCKS_PER_SEC);
         printf("%6.2f\t", s1);
         fflush(stdout);
 
@@ -117,7 +114,7 @@ int main(void) {
             modp_b16_encode(result, teststr1, sizes[j]);
         }
         c1 = clock();
-        s1 = (double)(c1 - c0)*(1.0 / (double)CLOCKS_PER_SEC);
+        s1 = (double)(c1 - c0) * (1.0 / (double)CLOCKS_PER_SEC);
         printf("%6.2f\t", s1);
         fflush(stdout);
 
@@ -129,7 +126,7 @@ int main(void) {
             modp_b2_encode(result, teststr1, sizes[j]);
         }
         c1 = clock();
-        s1 = (double)(c1 - c0)*(1.0 / (double)CLOCKS_PER_SEC);
+        s1 = (double)(c1 - c0) * (1.0 / (double)CLOCKS_PER_SEC);
         printf("%6.2f\t", s1);
         fflush(stdout);
 
@@ -141,7 +138,7 @@ int main(void) {
             modp_bjavascript_encode(result, teststr1, sizes[j]);
         }
         c1 = clock();
-        s1 = (double)(c1 - c0)*(1.0 / (double)CLOCKS_PER_SEC);
+        s1 = (double)(c1 - c0) * (1.0 / (double)CLOCKS_PER_SEC);
         printf("%6.2f\t", s1);
         fflush(stdout);
 
@@ -164,7 +161,7 @@ int main(void) {
             modp_b64_decode(result2, result, len);
         }
         c1 = clock();
-        s1 =  (double)(c1 - c0)*(1.0 / (double)CLOCKS_PER_SEC);
+        s1 = (double)(c1 - c0) * (1.0 / (double)CLOCKS_PER_SEC);
         printf("%6.2f\t", s1);
         fflush(stdout);
 
@@ -174,9 +171,9 @@ int main(void) {
             apr_base64_decode_binary((unsigned char*)result2, result);
         }
         c1 = clock();
-        s2 =  (double)(c1 - c0)*(1.0 / (double)CLOCKS_PER_SEC);
-        printf("%6.2f\t",  s2);
-        printf("%6.2fx\t\t", s2/s1);
+        s2 = (double)(c1 - c0) * (1.0 / (double)CLOCKS_PER_SEC);
+        printf("%6.2f\t", s2);
+        printf("%6.2fx\t\t", s2 / s1);
         fflush(stdout);
 
         /*
@@ -190,7 +187,7 @@ int main(void) {
             modp_b85_decode(result2, result, len);
         }
         c1 = clock();
-        s1 =  (double)(c1 - c0)*(1.0 / (double)CLOCKS_PER_SEC);
+        s1 = (double)(c1 - c0) * (1.0 / (double)CLOCKS_PER_SEC);
         printf("%6.2f\t", s1);
         fflush(stdout);
 
@@ -202,7 +199,7 @@ int main(void) {
             modp_burl_decode(result2, result, len);
         }
         c1 = clock();
-        s1 =  (double)(c1 - c0)*(1.0 / (double)CLOCKS_PER_SEC);
+        s1 = (double)(c1 - c0) * (1.0 / (double)CLOCKS_PER_SEC);
         printf("%6.2f\t", s1);
         fflush(stdout);
 
@@ -217,7 +214,7 @@ int main(void) {
             modp_b16_decode(result2, result, len);
         }
         c1 = clock();
-        s1 =  (double)(c1 - c0)*(1.0 / (double)CLOCKS_PER_SEC);
+        s1 = (double)(c1 - c0) * (1.0 / (double)CLOCKS_PER_SEC);
         printf("%6.2f\t", s1);
         fflush(stdout);
 
@@ -232,7 +229,7 @@ int main(void) {
             modp_b2_decode(result2, result, len);
         }
         c1 = clock();
-        s1 =  (double)(c1 - c0)*(1.0 / (double)CLOCKS_PER_SEC);
+        s1 = (double)(c1 - c0) * (1.0 / (double)CLOCKS_PER_SEC);
         printf("%6.2f\t", s1);
         fflush(stdout);
 

@@ -1,6 +1,3 @@
-/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4 -*- */
-/* vi: set expandtab shiftwidth=4 tabstop=4: */
-
 /**
  * \file modp_ascii.h
  * \brief Simple ASCII manipulations including upper and lower casing,
@@ -14,10 +11,10 @@
  * MODP_ASCII -- Simple ascii manipulation (uppercase, lowercase, etc)
  * https://github.com/client9/stringencoders
  *
- * Copyright &copy; 2007, Nick Galbreath -- nickg [at] client9 [dot] com
+ * Copyright &copy; 2007-2016, Nick Galbreath -- nickg [at] client9 [dot] com
  * All rights reserved.
  *
- * Released under bsd license.  See modp_ascii.c for details.
+ * Released under MIT license.  See LICENSE for details.
  * </PRE>
  *
  */
@@ -25,8 +22,8 @@
 #ifndef COM_MODP_STRINGENCODERS_ASCII
 #define COM_MODP_STRINGENCODERS_ASCII
 
-#include "modp_stdint.h"
 #include "extern_c_begin.h"
+#include "modp_stdint.h"
 
 /*
  * \param[in,out] str the input string
@@ -113,53 +110,53 @@ size_t modp_rtrim(char* str, size_t len);
 
 namespace modp {
 
-    inline std::string& toupper(std::string& str)
-    {
-        modp_toupper(const_cast<char*>(str.c_str()), str.size());
-        return str;
-    }
-
-    inline std::string toupper(const std::string& str)
-    {
-        std::string s(str.size(), '\0');
-        modp_toupper_copy(const_cast<char*>(s.data()), str.data(), str.size());
-        return s;
-    }
-
-    inline std::string tolower(const std::string& str)
-    {
-        std::string s(str.size(), '\0');
-        modp_tolower_copy(const_cast<char*>(s.data()), str.data(), str.size());
-        return s;
-    }
-
-    inline std::string& tolower(std::string& str)
-    {
-        modp_tolower(const_cast<char*>(str.c_str()), str.size());
-        return str;
-    }
-
-    inline std::string toprint(const std::string& str)
-    {
-        std::string s(str.size(), '\0');
-        modp_toprint_copy(const_cast<char*>(s.data()), str.data(), str.size());
-        return s;
-    }
-
-    inline std::string& toprint(std::string& str)
-    {
-        modp_toprint(const_cast<char*>(str.c_str()), str.size());
-        return str;
-    }
-
-    inline std::string& rtrim(std::string& s)
-    {
-        size_t d = modp_rtrim(const_cast<char*>(s.data()), s.size());
-        s.erase(d, std::string::npos);
-        return s;
-    }
+inline std::string& toupper(std::string& str)
+{
+    modp_toupper(const_cast<char*>(str.c_str()), str.size());
+    return str;
 }
 
-#endif  /* __cplusplus */
+inline std::string toupper(const std::string& str)
+{
+    std::string s(str.size(), '\0');
+    modp_toupper_copy(const_cast<char*>(s.data()), str.data(), str.size());
+    return s;
+}
 
-#endif  /* MODP_ASCII */
+inline std::string tolower(const std::string& str)
+{
+    std::string s(str.size(), '\0');
+    modp_tolower_copy(const_cast<char*>(s.data()), str.data(), str.size());
+    return s;
+}
+
+inline std::string& tolower(std::string& str)
+{
+    modp_tolower(const_cast<char*>(str.c_str()), str.size());
+    return str;
+}
+
+inline std::string toprint(const std::string& str)
+{
+    std::string s(str.size(), '\0');
+    modp_toprint_copy(const_cast<char*>(s.data()), str.data(), str.size());
+    return s;
+}
+
+inline std::string& toprint(std::string& str)
+{
+    modp_toprint(const_cast<char*>(str.c_str()), str.size());
+    return str;
+}
+
+inline std::string& rtrim(std::string& s)
+{
+    size_t d = modp_rtrim(const_cast<char*>(s.data()), s.size());
+    s.erase(d, std::string::npos);
+    return s;
+}
+}
+
+#endif /* __cplusplus */
+
+#endif /* MODP_ASCII */

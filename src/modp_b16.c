@@ -1,50 +1,18 @@
-/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4 -*- */
-/* vi: set expandtab shiftwidth=4 tabstop=4: */
-
 /**
  * \file
  * <PRE>
  * MODP_B16 - High performance base16 encoder/decoder
  * https://github.com/client9/stringencoders
  *
- * Copyright &copy; 2005, 2006, 2007  Nick Galbreath
+ * Copyright &copy; 2005-2016  Nick Galbreath
  * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are
- * met:
- *
- *   Redistributions of source code must retain the above copyright
- *   notice, this list of conditions and the following disclaimer.
- *
- *   Redistributions in binary form must reproduce the above copyright
- *   notice, this list of conditions and the following disclaimer in the
- *   documentation and/or other materials provided with the distribution.
- *
- *   Neither the name of the modp.com nor the names of its
- *   contributors may be used to endorse or promote products derived from
- *   this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * This is the standard "new" BSD license:
- * http://www.opensource.org/licenses/bsd-license.php
+ * Released under MIT license. See LICENSE for details.
  * </PRE>
  */
-#include "config.h"
 #include "modp_b16.h"
-#include "modp_stdint.h"
+#include "config.h"
 #include "modp_b16_data.h"
+#include "modp_stdint.h"
 
 size_t modp_b16_encode(char* dest, const char* str, size_t len)
 {
@@ -52,23 +20,23 @@ size_t modp_b16_encode(char* dest, const char* str, size_t len)
     const size_t buckets = len >> 2; /* i.e. i / 4 */
     const size_t leftover = len & 0x03; /* i.e. i % 4 */
     const uint8_t* srcChar;
-    uint8_t* p = (uint8_t*) dest;
+    uint8_t* p = (uint8_t*)dest;
     uint8_t t1, t2, t3, t4;
-    const uint32_t* srcInt = (const uint32_t*) str;
+    const uint32_t* srcInt = (const uint32_t*)str;
     uint32_t x;
     for (i = 0; i < buckets; ++i) {
         x = *srcInt++;
-        /*      t1 = *s++; t2 = *s++; t3 = *s++; t4 = *s++; */
+/*      t1 = *s++; t2 = *s++; t3 = *s++; t4 = *s++; */
 #ifdef WORDS_BIGENDIAN
-        t1 = (uint8_t) (x >> 24);
-        t2 = (uint8_t) (x >> 16);
-        t3 = (uint8_t) (x >> 8);
-        t4 = (uint8_t) x;
+        t1 = (uint8_t)(x >> 24);
+        t2 = (uint8_t)(x >> 16);
+        t3 = (uint8_t)(x >> 8);
+        t4 = (uint8_t)x;
 #else
-        t4 = (uint8_t) (x >> 24);
-        t3 = (uint8_t) (x >> 16);
-        t2 = (uint8_t) (x >> 8);
-        t1 = (uint8_t) x;
+        t4 = (uint8_t)(x >> 24);
+        t3 = (uint8_t)(x >> 16);
+        t2 = (uint8_t)(x >> 8);
+        t1 = (uint8_t)x;
 #endif
         *p++ = gsHexEncodeC1[t1];
         *p++ = gsHexEncodeC2[t1];
@@ -80,27 +48,27 @@ size_t modp_b16_encode(char* dest, const char* str, size_t len)
         *p++ = gsHexEncodeC2[t4];
     }
 
-    srcChar = (const uint8_t*) srcInt;
+    srcChar = (const uint8_t*)srcInt;
     switch (leftover) {
     case 0:
         break;
     case 1:
-        t1 = (uint8_t) *srcChar;
+        t1 = (uint8_t)*srcChar;
         *p++ = gsHexEncodeC1[t1];
         *p++ = gsHexEncodeC2[t1];
         break;
     case 2:
-        t1 = (uint8_t) *srcChar++;
-        t2 = (uint8_t) *srcChar;
+        t1 = (uint8_t)*srcChar++;
+        t2 = (uint8_t)*srcChar;
         *p++ = gsHexEncodeC1[t1];
         *p++ = gsHexEncodeC2[t1];
         *p++ = gsHexEncodeC1[t2];
         *p++ = gsHexEncodeC2[t2];
         break;
     default: /* case 3 */
-        t1 = (uint8_t) *srcChar++;
-        t2 = (uint8_t) *srcChar++;
-        t3 = (uint8_t) *srcChar;
+        t1 = (uint8_t)*srcChar++;
+        t2 = (uint8_t)*srcChar++;
+        t3 = (uint8_t)*srcChar;
         *p++ = gsHexEncodeC1[t1];
         *p++ = gsHexEncodeC2[t1];
         *p++ = gsHexEncodeC1[t2];
@@ -109,20 +77,20 @@ size_t modp_b16_encode(char* dest, const char* str, size_t len)
         *p++ = gsHexEncodeC2[t3];
     }
     *p = '\0';
-    return  (size_t)(p - (uint8_t*) dest);
+    return (size_t)(p - (uint8_t*)dest);
 }
 
 size_t modp_b16_decode(char* dest, const char* str, size_t len)
 {
     size_t i;
-    uint8_t t0,t1,t2,t3;
-    uint8_t* p = (uint8_t*) dest;
+    uint8_t t0, t1, t2, t3;
+    uint8_t* p = (uint8_t*)dest;
     uint32_t val1, val2;
-    const uint8_t* s = (const uint8_t*) str;
-    const size_t buckets = len >> 2;    /* i.e. len / 4 */
+    const uint8_t* s = (const uint8_t*)str;
+    const size_t buckets = len >> 2; /* i.e. len / 4 */
     const size_t leftover = len & 0x03; /* i.e. len % 4 */
     if (leftover & 0x01) { /* i.e if leftover is odd,      */
-                           /* leftover==1 || leftover == 3 */
+        /* leftover==1 || leftover == 3 */
         return (size_t)-1;
     }
 
@@ -132,14 +100,17 @@ size_t modp_b16_decode(char* dest, const char* str, size_t len)
      * lookup
      */
     for (i = 0; i < buckets; ++i) {
-        t0 = *s++; t1= *s++; t2 = *s++; t3 = *s++;
+        t0 = *s++;
+        t1 = *s++;
+        t2 = *s++;
+        t3 = *s++;
         val1 = gsHexDecodeD2[t0] | gsHexDecodeMap[t1];
         val2 = gsHexDecodeD2[t2] | gsHexDecodeMap[t3];
         if (val1 > 0xff || val2 > 0xff) {
             return (size_t)-1;
         }
-        *p++ = (uint8_t) val1;
-        *p++ = (uint8_t) val2;
+        *p++ = (uint8_t)val1;
+        *p++ = (uint8_t)val2;
     }
 
     if (leftover == 2) {
@@ -147,7 +118,7 @@ size_t modp_b16_decode(char* dest, const char* str, size_t len)
         if (val1 > 0xff) {
             return (size_t)-1;
         }
-        *p++ = (uint8_t) val1;
+        *p++ = (uint8_t)val1;
     }
 
     return (size_t)(p - (uint8_t*)dest);

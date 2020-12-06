@@ -1,17 +1,14 @@
-/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4 -*- */
-/* vi: set expandtab shiftwidth=4 tabstop=4: */
-
 /**
  * \file
  * <PRE>
  * High performance WEB-SAFE base64 encoder / decoder
  *
- * Copyright &copy; 2005, 2006, 2007 Nick Galbreath -- nickg [at] client9 [dot] com
+ * Copyright &copy; 2005-2016 Nick Galbreath -- nickg [at] client9 [dot] com
  * All rights reserved.
  *
- * http://code.google.com/p/stringencoders/
+ * https://github.com/client9/stringencoders/
  *
- * Released under bsd license.  See modp_b64.c for details.
+ * Released under MIT license.  See LICENSE for details.
  * </pre>
  *
  * This uses a "URL-safe" or "WEB-safe" encoding.  THe standard
@@ -100,7 +97,7 @@ size_t modp_b64r_decode(char* dest, const char* src, size_t len);
  *
  * +1 is for any extra null.
  */
-#define modp_b64r_encode_len(A) ((A+2)/3 * 4 + 1)
+#define modp_b64r_encode_len(A) ((A + 2) / 3 * 4 + 1)
 
 /**
  * Given a base64 string of length len,
@@ -136,7 +133,7 @@ size_t modp_b64r_decode(char* dest, const char* src, size_t len);
  * // foo is filled out now
  * \endcode
  */
-#define modp_b64r_encode_strlen(A) ((A + 2)/ 3 * 4)
+#define modp_b64r_encode_strlen(A) ((A + 2) / 3 * 4)
 
 END_C
 
@@ -146,46 +143,46 @@ END_C
 
 namespace modp {
 
-    /** \brief b64r encode a cstr with len
+/** \brief b64r encode a cstr with len
      *
      * \param[in] s the input string to encode
      * \param[in] len the length of the input string
      * \return a newly allocated b64r string.  Empty if failed.
      */
-    inline std::string b64r_encode(const char* s, size_t len)
-    {
-        std::string x(modp_b64r_encode_len(len), '\0');
-        size_t d = modp_b64r_encode(const_cast<char*>(x.data()), s,
-                                 static_cast<int>(len));
-        if (d == (size_t)-1) {
-            x.clear();
-        } else {
-            x.erase(d, std::string::npos);
-        }
-        return x;
+inline std::string b64r_encode(const char* s, size_t len)
+{
+    std::string x(modp_b64r_encode_len(len), '\0');
+    size_t d = modp_b64r_encode(const_cast<char*>(x.data()), s,
+        static_cast<int>(len));
+    if (d == (size_t)-1) {
+        x.clear();
+    } else {
+        x.erase(d, std::string::npos);
     }
+    return x;
+}
 
-    /** \brief b64r encode a cstr
+/** \brief b64r encode a cstr
      *
      * \param[in] s the input string to encode
      * \return a newly allocated b64r string.  Empty if failed.
      */
-    inline std::string b64r_encode(const char* s)
-    {
-        return b64r_encode(s, static_cast<int>(strlen(s)));
-    }
+inline std::string b64r_encode(const char* s)
+{
+    return b64r_encode(s, static_cast<int>(strlen(s)));
+}
 
-    /** \brief b64r encode a const std::string
+/** \brief b64r encode a const std::string
      *
      * \param[in] s the input string to encode
      * \return a newly allocated b64r string.  Empty if failed.
      */
-    inline std::string b64r_encode(const std::string& s)
-    {
-        return b64r_encode(s.data(), s.size());
-    }
+inline std::string b64r_encode(const std::string& s)
+{
+    return b64r_encode(s.data(), s.size());
+}
 
-    /** \brief self-modifing b64r encode
+/** \brief self-modifing b64r encode
      *
      * web-safe base 64 decode a string (self-modifing)
      * On failure, the string is empty.
@@ -193,32 +190,32 @@ namespace modp {
      * \param[in,out] s the string to be decoded
      * \return a reference to the input string
      */
-    inline std::string& b64r_encode(std::string& s)
-    {
-        std::string x(b64r_encode(s.data(), s.size()));
-        s.swap(x);
-        return s;
-    }
+inline std::string& b64r_encode(std::string& s)
+{
+    std::string x(b64r_encode(s.data(), s.size()));
+    s.swap(x);
+    return s;
+}
 
-    inline std::string b64r_decode(const char* src, size_t len)
-    {
-        std::string x(modp_b64r_decode_len(len)+1, '\0');
-        size_t d = modp_b64r_decode(const_cast<char*>(x.data()), src,
-                                    static_cast<int>(len));
-        if (d == (size_t)-1) {
-            x.clear();
-        } else {
-            x.erase(d, std::string::npos);
-        }
-        return x;
+inline std::string b64r_decode(const char* src, size_t len)
+{
+    std::string x(modp_b64r_decode_len(len) + 1, '\0');
+    size_t d = modp_b64r_decode(const_cast<char*>(x.data()), src,
+        static_cast<int>(len));
+    if (d == (size_t)-1) {
+        x.clear();
+    } else {
+        x.erase(d, std::string::npos);
     }
+    return x;
+}
 
-    inline std::string b64r_decode(const char* src)
-    {
-        return b64r_decode(src, strlen(src));
-    }
+inline std::string b64r_decode(const char* src)
+{
+    return b64r_decode(src, strlen(src));
+}
 
-    /**
+/**
      * base 64 decode a string (self-modifing)
      * On failure, the string is empty.
      *
@@ -227,20 +224,19 @@ namespace modp {
      * \param[in,out] s the string to be decoded
      * \return a reference to the input string
      */
-    inline std::string& b64r_decode(std::string& s)
-    {
-        std::string x(b64r_decode(s.data(), s.size()));
-        s.swap(x);
-        return s;
-    }
+inline std::string& b64r_decode(std::string& s)
+{
+    std::string x(b64r_decode(s.data(), s.size()));
+    s.swap(x);
+    return s;
+}
 
-    inline std::string b64r_decode(const std::string& s)
-    {
-        return b64r_decode(s.data(), s.size());
-    }
+inline std::string b64r_decode(const std::string& s)
+{
+    return b64r_decode(s.data(), s.size());
+}
 }
 
 #endif /* __cplusplus */
 
 #endif /* MODP_B64R */
-

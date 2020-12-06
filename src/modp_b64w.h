@@ -1,19 +1,16 @@
-/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4 -*- */
-/* vi: set expandtab shiftwidth=4 tabstop=4: */
-
 /**
  * <PRE>
  * High performance WEB-SAFE base64 encoder / decoder
  *
- * Copyright &copy; 2005, 2006, 2007 Nick Galbreath -- nickg [at] modp [dot] com
+ * Copyright &copy; 2005-2016 Nick Galbreath -- nickg [at] client9 [dot] com
  * All rights reserved.
  *
- * http://code.google.com/p/stringencoders/
+ * https://github.com/client9/stringencoders/
  *
- * Released under bsd license.  See modp_b64w.c for details.
+ * Released under MIT license.  See LICENSE for details.
  * </pre>
  *
- * This uses a "URL-safe" or "WEB-safe" encoding.  THe standard
+ * This uses a "URL-safe" or "WEB-safe" encoding.  The standard
  * base 64 encoding uses the characters '+', '/' and '=' have special
  * restrictions when used inside a URL.
  *
@@ -28,8 +25,8 @@
 #ifndef COM_MODP_STRINGENCODERS_B64W
 #define COM_MODP_STRINGENCODERS_B64W
 
-#include "modp_stdint.h"
 #include "extern_c_begin.h"
+#include "modp_stdint.h"
 
 /**
  * \brief Encode a raw binary string into web-safe base 64.
@@ -91,7 +88,7 @@ size_t modp_b64w_decode(char* dest, const char* src, size_t len);
  *
  * +1 is for any extra null.
  */
-#define modp_b64w_encode_len(A) ((A+2)/3 * 4 + 1)
+#define modp_b64w_encode_len(A) ((A + 2) / 3 * 4 + 1)
 
 /**
  * Given a base64 string of length len,
@@ -127,7 +124,7 @@ size_t modp_b64w_decode(char* dest, const char* src, size_t len);
  * // foo is filled out now
  * \endcode
  */
-#define modp_b64w_encode_strlen(A) ((A + 2)/ 3 * 4)
+#define modp_b64w_encode_strlen(A) ((A + 2) / 3 * 4)
 
 #include "extern_c_end.h"
 
@@ -137,45 +134,45 @@ size_t modp_b64w_decode(char* dest, const char* src, size_t len);
 
 namespace modp {
 
-    /** \brief b64w encode a cstr with len
+/** \brief b64w encode a cstr with len
      *
      * \param[in] s the input string to encode
      * \param[in] len the length of the input string
      * \return a newly allocated b64w string.  Empty if failed.
      */
-    inline std::string b64w_encode(const char* s, size_t len)
-    {
-        std::string x(modp_b64w_encode_len(len), '\0');
-        size_t d = modp_b64w_encode(const_cast<char*>(x.data()), s, len);
-        if (d == (size_t)-1) {
-            x.clear();
-        } else {
-            x.erase(d, std::string::npos);
-        }
-        return x;
+inline std::string b64w_encode(const char* s, size_t len)
+{
+    std::string x(modp_b64w_encode_len(len), '\0');
+    size_t d = modp_b64w_encode(const_cast<char*>(x.data()), s, len);
+    if (d == (size_t)-1) {
+        x.clear();
+    } else {
+        x.erase(d, std::string::npos);
     }
+    return x;
+}
 
-    /** \brief b64w encode a cstr
+/** \brief b64w encode a cstr
      *
      * \param[in] s the input string to encode
      * \return a newly allocated b64w string.  Empty if failed.
      */
-    inline std::string b64w_encode(const char* s)
-    {
-        return b64w_encode(s, strlen(s));
-    }
+inline std::string b64w_encode(const char* s)
+{
+    return b64w_encode(s, strlen(s));
+}
 
-    /** \brief b64w encode a const std::string
+/** \brief b64w encode a const std::string
      *
      * \param[in] s the input string to encode
      * \return a newly allocated b64w string.  Empty if failed.
      */
-    inline std::string b64w_encode(const std::string& s)
-    {
-        return b64w_encode(s.data(), s.size());
-    }
+inline std::string b64w_encode(const std::string& s)
+{
+    return b64w_encode(s.data(), s.size());
+}
 
-    /** \brief self-modifing b64w encode
+/** \brief self-modifing b64w encode
      *
      * web-safe base 64 decode a string (self-modifing)
      * On failure, the string is empty.
@@ -183,31 +180,31 @@ namespace modp {
      * \param[in,out] s the string to be decoded
      * \return a reference to the input string
      */
-    inline std::string& b64w_encode(std::string& s)
-    {
-        std::string x(b64w_encode(s.data(), s.size()));
-        s.swap(x);
-        return s;
-    }
+inline std::string& b64w_encode(std::string& s)
+{
+    std::string x(b64w_encode(s.data(), s.size()));
+    s.swap(x);
+    return s;
+}
 
-    inline std::string b64w_decode(const char* src, size_t len)
-    {
-        std::string x(modp_b64w_decode_len(len)+1, '\0');
-        size_t d = modp_b64w_decode(const_cast<char*>(x.data()), src, len);
-        if (d == (size_t)-1) {
-            x.clear();
-        } else {
-            x.erase(d, std::string::npos);
-        }
-        return x;
+inline std::string b64w_decode(const char* src, size_t len)
+{
+    std::string x(modp_b64w_decode_len(len) + 1, '\0');
+    size_t d = modp_b64w_decode(const_cast<char*>(x.data()), src, len);
+    if (d == (size_t)-1) {
+        x.clear();
+    } else {
+        x.erase(d, std::string::npos);
     }
+    return x;
+}
 
-    inline std::string b64w_decode(const char* src)
-    {
-        return b64w_decode(src, strlen(src));
-    }
+inline std::string b64w_decode(const char* src)
+{
+    return b64w_decode(src, strlen(src));
+}
 
-    /**
+/**
      * base 64 decode a string (self-modifing)
      * On failure, the string is empty.
      *
@@ -216,20 +213,19 @@ namespace modp {
      * \param[in,out] s the string to be decoded
      * \return a reference to the input string
      */
-    inline std::string& b64w_decode(std::string& s)
-    {
-        std::string x(b64w_decode(s.data(), s.size()));
-        s.swap(x);
-        return s;
-    }
+inline std::string& b64w_decode(std::string& s)
+{
+    std::string x(b64w_decode(s.data(), s.size()));
+    s.swap(x);
+    return s;
+}
 
-    inline std::string b64w_decode(const std::string& s)
-    {
-        return b64w_decode(s.data(), s.size());
-    }
+inline std::string b64w_decode(const std::string& s)
+{
+    return b64w_decode(s.data(), s.size());
+}
 }
 
 #endif /* __cplusplus */
 
 #endif /* MODP_B64W */
-

@@ -1,6 +1,3 @@
-/* -*- mode: c; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4 -*- */
-/* vi: set expandtab shiftwidth=4 tabstop=4: */
-
 /* we compile as C90 but use snprintf */
 #define _ISOC99_SOURCE
 
@@ -27,7 +24,7 @@ static char* testUtf8ValidateAscii(void)
     mu_assert_int_equals(d, 0);
 
     /* with null and highest ASCII character 127 */
-    d = modp_utf8_validate("a\x00\x7Fz", (size_t) 4);
+    d = modp_utf8_validate("a\x00\x7Fz", (size_t)4);
     mu_assert_int_equals(d, 0);
     return 0;
 }
@@ -109,7 +106,7 @@ static char* testUtf8Validate4(void)
     d = modp_utf8_validate(s4, strlen(s4));
     mu_assert_int_equals(d, 0);
 
-    d = modp_utf8_validate(s4, strlen(s4) -1);
+    d = modp_utf8_validate(s4, strlen(s4) - 1);
     mu_assert_int_equals(d, MODP_UTF8_SHORT);
 
     /* maximum value */
@@ -189,4 +186,3 @@ static char* all_tests(void)
 }
 
 UNITTESTS
-

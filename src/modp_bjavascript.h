@@ -1,6 +1,3 @@
-/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4 -*- */
-/* vi: set expandtab shiftwidth=4 tabstop=4: */
-
 /**
  * \file modp_bjavascript.h
  * \brief "C-string" to "javascript-string" encoder
@@ -23,12 +20,12 @@
  * <PRE>
  * High Performance c-string to javascript-string encoder
  *
- * Copyright &copy; 2006, 2007  Nick Galbreath
+ * Copyright &copy; 2006-2016  Nick Galbreath
  * All rights reserved.
  *
  * https://github.com/client9/stringencoders
  *
- * Released under bsd license.  See modp_bjavascript.c for details.
+ * Released under MIT license.  See LICENSE for details.
  * </PRE>
  */
 
@@ -38,8 +35,6 @@
 #include "modp_stdint.h"
 
 #include "extern_c_begin.h"
-
-
 
 /**
  * "javascript" encode a stirng
@@ -53,7 +48,7 @@
  */
 size_t modp_bjavascript_encode(char* dest, const char* str, size_t len);
 
-#define modp_bjavascript_encode_len(A) (4*A + 1)
+#define modp_bjavascript_encode_len(A) (4 * A + 1)
 
 /**
  * Given the exact size of output string.
@@ -79,32 +74,32 @@ size_t modp_bjavascript_encode_strlen(const char* str, size_t len);
 #include <string>
 namespace modp {
 
-    inline std::string javascript_encode(const char* s, size_t len)
-    {
-        std::string x(modp_bjavascript_encode_len(len), '\0');
-        size_t d = modp_bjavascript_encode(const_cast<char*>(x.data()), s, len);
-        x.erase(d, std::string::npos);
-        return x;
-    }
+inline std::string javascript_encode(const char* s, size_t len)
+{
+    std::string x(modp_bjavascript_encode_len(len), '\0');
+    size_t d = modp_bjavascript_encode(const_cast<char*>(x.data()), s, len);
+    x.erase(d, std::string::npos);
+    return x;
+}
 
-    inline std::string javascript_encode(const char* s)
-    {
-        return javascript_encode(s, strlen(s));
-    }
+inline std::string javascript_encode(const char* s)
+{
+    return javascript_encode(s, strlen(s));
+}
 
-    inline std::string& javascript_encode(std::string& s)
-    {
-        std::string x(javascript_encode(s.data(), s.size()));
-        s.swap(x);
-        return s;
-    }
+inline std::string& javascript_encode(std::string& s)
+{
+    std::string x(javascript_encode(s.data(), s.size()));
+    s.swap(x);
+    return s;
+}
 
-    inline std::string javascript_encode(const std::string& s)
-    {
-        return javascript_encode(s.data(), s.size());
-    }
+inline std::string javascript_encode(const std::string& s)
+{
+    return javascript_encode(s.data(), s.size());
+}
 
-}       /* namespace modp */
-#endif  /* __cplusplus */
+} /* namespace modp */
+#endif /* __cplusplus */
 
 #endif /* modp_bjavascript */

@@ -1,6 +1,3 @@
-/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4 -*- */
-/* vi: set expandtab shiftwidth=4 tabstop=4: */
-
 /**
  * \file modp_html.h
  * \brief Experimental HTML decoder
@@ -12,12 +9,12 @@
  * <PRE>
  * High Performance HTML Decoder (for now)
  *
- * Copyright &copy; 2013 Nick Galbreath
+ * Copyright &copy; 2013-2016 Nick Galbreath
  * All rights reserved.
  *
  * https://github.com/client9/stringencoders
  *
- * Released under bsd license.  See bfast64.c for details.
+ * Released under MIT license.  See LICENSE for details.
  * </PRE>
  */
 
@@ -35,7 +32,6 @@
 #endif
 
 BEGIN_C
-
 
 /**
  * \brief HTML decode a single character

@@ -1,5 +1,6 @@
 
 include_HEADERS = \
+	extern_c_begin.h extern_c_end.h \
 	modp_b16.h modp_b64.h modp_b64w.h modp_b64r.h \
 	modp_b85.h modp_burl.h modp_bjavascript.h \
 	modp_numtoa.h modp_ascii.h modp_b2.h \
@@ -21,8 +22,10 @@ libmodpbase64_la_SOURCES = \
 	modp_ascii.h modp_ascii.c modp_ascii_data.h \
 	modp_utf8.h modp_utf8.c \
 	modp_html.h modp_html.c \
-	modp_json.h modp_json.c \
-	modp_messagepack.h modp_messagepack.c
+	modp_json.h modp_json.c 
+
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = stringencoders.pc
 
 #libmodpbase64_la_DEPENDENCIES = \
 #	modp_b2_data.h modp_b2_gen \

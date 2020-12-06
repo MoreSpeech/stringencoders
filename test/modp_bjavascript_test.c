@@ -1,6 +1,3 @@
-/* -*- mode: c; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4 -*- */
-/* vi: set expandtab shiftwidth=4 tabstop=4: */
-
 /* we compile as C90 but use snprintf */
 #define _ISOC99_SOURCE
 
@@ -49,7 +46,7 @@ static char* testSimpleEscape(void)
     /*
      * Test the Raw escape '\' --> '\\'
      */
-    char ibuf[] = {'\\', '\0'};
+    char ibuf[] = { '\\', '\0' };
     memset(buf, 0, sizeof(buf));
     d = modp_bjavascript_encode(buf, ibuf, (size_t)1);
     mu_assert_int_equals(d, 2);
@@ -75,7 +72,7 @@ static char* testSQuoteEscape(void)
     size_t sz = modp_bjavascript_encode_strlen(s1, len1);
     mu_assert_int_equals(sz, len2);
 
-    char ibuf[] = {'\'', '\0'};
+    char ibuf[] = { '\'', '\0' };
     memset(buf, 0, sizeof(buf));
     d = modp_bjavascript_encode(buf, ibuf, (size_t)1);
     mu_assert_int_equals(d, 2);
@@ -100,7 +97,7 @@ static char* testDQuoteEscape(void)
 
     size_t sz = modp_bjavascript_encode_strlen(s1, len1);
     mu_assert_int_equals(sz, len2);
-    char ibuf[] = {'\"', '\0'};
+    char ibuf[] = { '\"', '\0' };
     memset(buf, 0, sizeof(buf));
     d = modp_bjavascript_encode(buf, ibuf, (size_t)1);
     mu_assert_int_equals(d, 2);
@@ -113,7 +110,7 @@ static char* testDQuoteEscape(void)
 static char* testBinaryEscape(void)
 {
     char buf[100];
-    const char s1[] = {1,2,3,4,0};
+    const char s1[] = { 1, 2, 3, 4, 0 };
     const char* s2 = "\\x01\\x02\\x03\\x04";
     const size_t len1 = strlen(s1);
     const size_t len2 = strlen(s2);
@@ -138,5 +135,3 @@ static char* all_tests(void)
 }
 
 UNITTESTS
-
-

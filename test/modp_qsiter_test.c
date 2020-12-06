@@ -1,6 +1,3 @@
-/* -*- mode: c; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4 -*- */
-/* vi: set expandtab shiftwidth=4 tabstop=4: */
-
 /* we compile as C90 but use snprintf */
 #define _ISOC99_SOURCE
 
@@ -146,8 +143,6 @@ static char* test_qs_parse5()
     return 0;
 }
 
-
-
 static char* test_qs_parse6()
 {
     struct qsiter_t qsi;
@@ -171,7 +166,6 @@ static char* test_qs_parse6()
     return 0;
 }
 
-
 static char* test_qs_parse7()
 {
     struct qsiter_t qsi;
@@ -194,7 +188,6 @@ static char* test_qs_parse7()
 
     return 0;
 }
-
 
 static char* test_qs_parse8()
 {

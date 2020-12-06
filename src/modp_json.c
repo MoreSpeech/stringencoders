@@ -1,50 +1,19 @@
-/* -*- mode: c; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4 -*- */
-/* vi: set expandtab shiftwidth=4 tabstop=4: */
-
 /**
  * \file
  * <pre>
- * modp_bjson.c High performance URL encoder/decoder
+ * modp_json.c High performance JSON encoder/decoder
  * https://github.com/client9/stringencoders
+ * NOTE THIS IS UNTESTED AND EXPERIMENTAL.
  *
- * Copyright &copy; 2006-2014 Nick Galbreath
+ * Copyright &copy; 2006-2016 Nick Galbreath
  * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are
- * met:
- *
- *   Redistributions of source code must retain the above copyright
- *   notice, this list of conditions and the following disclaimer.
- *
- *   Redistributions in binary form must reproduce the above copyright
- *   notice, this list of conditions and the following disclaimer in the
- *   documentation and/or other materials provided with the distribution.
- *
- *   Neither the name of the modp.com nor the names of its
- *   contributors may be used to endorse or promote products derived from
- *   this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * This is the standard "new" BSD license:
- * http://www.opensource.org/licenses/bsd-license.php
+ * Released under MIT license.  See LICENSE for details.
  * </PRE>
  */
 
-#include <assert.h>
 #include "modp_json.h"
 #include "modp_json_data.h"
+#include <assert.h>
 
 typedef enum {
     JSON_NONE,
@@ -68,7 +37,7 @@ static void modp_json_add_true(modp_json_ctx* ctx);
 static void modp_json_add_char(modp_json_ctx* ctx, int c)
 {
     if (ctx->dest) {
-        *(ctx->dest + ctx->size) = (char) c;
+        *(ctx->dest + ctx->size) = (char)c;
     }
     ctx->size += 1;
 }
@@ -189,7 +158,6 @@ void modp_json_add_bool(modp_json_ctx* ctx, int val)
     }
 }
 
-
 void modp_json_add_null(modp_json_ctx* ctx)
 {
     char* wstr;
@@ -207,29 +175,9 @@ void modp_json_add_null(modp_json_ctx* ctx)
 }
 
 void modp_json_add_uint64(modp_json_ctx* ctx, uint64_t uv,
-                          int stringonly)
+    int stringonly)
 {
-    size_t r =
-        (uv >= 10000000000000000000ULL) ? 20 :
-        (uv >= 1000000000000000000ULL) ? 19 :
-        (uv >= 100000000000000000ULL) ? 18 :
-        (uv >= 10000000000000000ULL) ? 17 :
-        (uv >= 1000000000000000ULL) ? 16 :
-        (uv >= 100000000000000ULL) ? 15 :
-        (uv >= 10000000000000ULL) ? 14 :
-        (uv >= 1000000000000ULL) ? 13 :
-        (uv >= 100000000000ULL) ? 12 :
-        (uv >= 10000000000ULL) ? 11 :
-        (uv >= 1000000000ULL) ? 10 :
-        (uv >= 100000000ULL) ? 9 :
-        (uv >= 10000000ULL) ? 8 :
-        (uv >= 1000000ULL) ? 7 :
-        (uv >= 100000ULL) ? 6 :
-        (uv >= 10000ULL) ? 5 :
-        (uv >= 1000ULL) ? 4 :
-        (uv >= 100ULL) ? 3 :
-        (uv >= 10ULL) ? 2 :
-        1ULL;
+    size_t r = (uv >= 10000000000000000000ULL) ? 20 : (uv >= 1000000000000000000ULL) ? 19 : (uv >= 100000000000000000ULL) ? 18 : (uv >= 10000000000000000ULL) ? 17 : (uv >= 1000000000000000ULL) ? 16 : (uv >= 100000000000000ULL) ? 15 : (uv >= 10000000000000ULL) ? 14 : (uv >= 1000000000000ULL) ? 13 : (uv >= 100000000000ULL) ? 12 : (uv >= 10000000000ULL) ? 11 : (uv >= 1000000000ULL) ? 10 : (uv >= 100000000ULL) ? 9 : (uv >= 10000000ULL) ? 8 : (uv >= 1000000ULL) ? 7 : (uv >= 100000ULL) ? 6 : (uv >= 10000ULL) ? 5 : (uv >= 1000ULL) ? 4 : (uv >= 100ULL) ? 3 : (uv >= 10ULL) ? 2 : 1ULL;
 
     if (uv > (1ULL << 53)) {
         stringonly = 1;
@@ -241,15 +189,16 @@ void modp_json_add_uint64(modp_json_ctx* ctx, uint64_t uv,
         char* wstr = ctx->dest + ctx->size;
         if (stringonly) {
             wstr[0] = '"';
-            wstr[r+1] = '"';
+            wstr[r + 1] = '"';
             wstr += r;
         } else {
             wstr += r - 1;
         }
 
         /* Conversion. Number is reversed. */
-        do *wstr-- = (char)(48 + (uv % 10)); while (uv /= 10);
-
+        do
+            *wstr-- = (char)(48 + (uv % 10));
+        while (uv /= 10);
     }
 
     if (stringonly) {
@@ -263,20 +212,10 @@ void modp_json_add_int32(modp_json_ctx* ctx, int v)
 {
     char* wstr;
     if (v > 0) {
-        return modp_json_add_uint32(ctx, (uint32_t) v);
+        return modp_json_add_uint32(ctx, (uint32_t)v);
     }
     uint32_t uv = (uint32_t)(-v);
-    size_t r =
-        (uv >= 1000000000) ? 10 :
-        (uv >= 100000000) ? 9 :
-        (uv >= 10000000) ? 8 :
-        (uv >= 1000000) ? 7 :
-        (uv >= 100000) ? 6 :
-        (uv >= 10000) ? 5 :
-        (uv >= 1000) ? 4 :
-        (uv >= 100) ? 3 :
-        (uv >= 10) ? 2 :
-        1;
+    size_t r = (uv >= 1000000000) ? 10 : (uv >= 100000000) ? 9 : (uv >= 10000000) ? 8 : (uv >= 1000000) ? 7 : (uv >= 100000) ? 6 : (uv >= 10000) ? 5 : (uv >= 1000) ? 4 : (uv >= 100) ? 3 : (uv >= 10) ? 2 : 1;
 
     modp_json_add_value(ctx);
 
@@ -285,34 +224,27 @@ void modp_json_add_int32(modp_json_ctx* ctx, int v)
         *wstr = '-';
         wstr += r;
         /* Conversion. Number is reversed. */
-        do *wstr-- = (char)(48 + (uv % 10)); while (uv /= 10);
+        do
+            *wstr-- = (char)(48 + (uv % 10));
+        while (uv /= 10);
     }
 
     ctx->size += r + 1; /* +1 for '-' minus sign */
 }
 
-
 void modp_json_add_uint32(modp_json_ctx* ctx, uint32_t uv)
 {
     char* wstr;
-    size_t r =
-        (uv >= 1000000000UL) ? 10 :
-        (uv >= 100000000UL) ? 9 :
-        (uv >= 10000000UL) ? 8 :
-        (uv >= 1000000UL) ? 7 :
-        (uv >= 100000UL) ? 6 :
-        (uv >= 10000UL) ? 5 :
-        (uv >= 1000UL) ? 4 :
-        (uv >= 100UL) ? 3 :
-        (uv >= 10UL) ? 2 :
-        1UL;
+    size_t r = (uv >= 1000000000UL) ? 10 : (uv >= 100000000UL) ? 9 : (uv >= 10000000UL) ? 8 : (uv >= 1000000UL) ? 7 : (uv >= 100000UL) ? 6 : (uv >= 10000UL) ? 5 : (uv >= 1000UL) ? 4 : (uv >= 100UL) ? 3 : (uv >= 10UL) ? 2 : 1UL;
 
     modp_json_add_value(ctx);
 
     if (ctx->dest) {
         wstr = ctx->dest + ctx->size;
         wstr += r - 1;
-        do *wstr-- = (char)(48 + (uv % 10)); while (uv /= 10);
+        do
+            *wstr-- = (char)(48 + (uv % 10));
+        while (uv /= 10);
     }
 
     ctx->size += r;
@@ -337,8 +269,8 @@ void modp_json_add_string(modp_json_ctx* ctx, const char* src, size_t len)
 static size_t modp_bjson_encode(char* dest, const char* src, size_t len)
 {
     static const char* hexchar = "0123456789ABCDEF";
-    const char* deststart = (const char*) dest;
-    const uint8_t* s = (const uint8_t*) src;
+    const char* deststart = (const char*)dest;
+    const uint8_t* s = (const uint8_t*)src;
     const uint8_t* srcend = s + len;
     uint8_t x;
     uint8_t val;
@@ -350,7 +282,7 @@ static size_t modp_bjson_encode(char* dest, const char* src, size_t len)
         val = gsJSONEncodeMap[x];
         if (val == 'a') {
             /* a for ascii, as-is */
-            *dest++ = (char) x;
+            *dest++ = (char)x;
         } else if (val == 'u') {
             /* u for unicode, 6 byte escape sequence */
             dest[0] = '\\';
@@ -375,7 +307,7 @@ static size_t modp_bjson_encode_strlen(const char* src, size_t len)
 {
     const uint8_t* s = (const uint8_t*)src;
     const uint8_t* srcend = s + len;
-    size_t count = 2;  /* for start and end quotes */
+    size_t count = 2; /* for start and end quotes */
     while (s < srcend) {
         count += (gsJSONEncodeLenMap[*s++]);
     }

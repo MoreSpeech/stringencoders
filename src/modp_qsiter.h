@@ -1,6 +1,3 @@
-/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4 -*- */
-/* vi: set expandtab shiftwidth=4 tabstop=4: */
-
 #ifndef COM_MODP_QSITER
 #define COM_MODP_QSITER
 
@@ -38,17 +35,16 @@
  *
  */
 struct qsiter_t {
-  const char* s;
-  size_t pos;
-  size_t len;
+    const char* s;
+    size_t pos;
+    size_t len;
 
-  const char* key;
-  size_t keylen;
+    const char* key;
+    size_t keylen;
 
-  const char* val;
-  size_t vallen;
+    const char* val;
+    size_t vallen;
 };
-
 
 /**
  * Reset a qsiter to an initial start (constructor)
@@ -72,4 +68,4 @@ int qsiter_next(struct qsiter_t* qsi);
 
 #include "extern_c_end.h"
 
-#endif  /* MODP_QSITER */
+#endif /* MODP_QSITER */
